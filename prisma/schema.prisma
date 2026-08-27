@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  OWNER
+}
+
+enum CourtStatus {
+  DISPONIBLE
+  INDISPONIBLE
+  MAINTENANCE
+}
+
+enum ReservationStatus {
+  CONFIRMEE
+  EN_ATTENTE
+  ANNULEE
+  TERMINEE
+}
+
+enum PaymentStatus {
+  NON_PAYE
+  PAYE
+  REMBOURSE
+}
+
+enum PaymentMethod {
+  CASH
+  CARD_ON_SITE
+  OTHER
+  ONLINE_FUTURE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  club         Club?         @relation("ClubOwner")
+  reservations Reservation[] @relation("ClientReservations")
+}
+
+model Club {
+  id           String   @id @default(cuid())
+  ownerId      String   @unique
+  owner        User     @relation("ClubOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?
+  address      String
+  city         String
+  postalCode   String
+  phone        String?
+  email        String?
+  whatsapp     String?
+  logo         String?
+  openHour     String   @default("08:00")
+  closeHour    String   @default("23:00")
+  pricePerHour Int      @default(24)
+  createdAt    DateTime @default(now())
+
+  courts       Court[]
+  reservations Reservation[]
+
+  @@index([city])
+}
+
+model Court {
+  id        String      @id @default(cuid())
+  clubId    String
+  club      Club        @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  name      String
+  number    String?
+  type      String      @default("Indoor")
+  status    CourtStatus @default(DISPONIBLE)
+  createdAt DateTime    @default(now())
+
+  reservations Reservation[]
+
+  @@index([clubId])
+}
+
+model Reservation {
+  id                String            @id @default(cuid())
+  clubId            String
+  club              Club              @relation(fields: [clubId], references: [id])
+  courtId           String
+  court             Court             @relation(fields: [courtId], references: [id])
+  clientId          String?
+  client            User?             @relation("ClientReservations", fields: [clientId], references: [id])
+  clientName        String
+  clientPhone       String?
+  clientEmail       String?
+  date              DateTime          @db.Date
+  startTime         String
+  endTime            String
+  duration          Int
+  price             Int
+  reservationStatus ReservationStatus @default(CONFIRMEE)
+  paymentStatus     PaymentStatus     @default(NON_PAYE)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  payment Payment?
+
+  @@index([courtId, date])
+  @@index([clubId, date])
+  @@index([clientId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  reservationId String        @unique
+  reservation   Reservation   @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  amount        Int
+  status        PaymentStatus @default(NON_PAYE)
+  paymentMethod PaymentMethod @default(ONLINE_FUTURE)
+  transactionId String?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+}
