@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+export const dynamic = 'force-dynamic';
 
 // Server component: fetches clubs directly via Prisma (no client-side fetch
 // needed for a public, read-only listing). This is the pattern to follow
