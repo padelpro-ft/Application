@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { PublicHeader } from '@/app/_components/ui';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -28,7 +29,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="max-w-sm mx-auto px-5 py-10">
+    <div>
+      <PublicHeader />
+      <main className="max-w-sm mx-auto px-5 py-10">
       <h1 className="text-xl font-bold mb-6">Créer un compte</h1>
       <div className="flex gap-2 mb-5">
         {[['CLIENT', 'Client'], ['OWNER', 'Club / Gérant']].map(([v, l]) => (
@@ -45,6 +48,7 @@ export default function RegisterPage() {
         {error && <p className="text-sm text-rose-600">{error}</p>}
         <button disabled={loading} className="w-full py-2.5 rounded-xl bg-lime-400 font-semibold">{loading ? '...' : 'Créer mon compte'}</button>
       </form>
-    </main>
+      </main>
+    </div>
   );
 }

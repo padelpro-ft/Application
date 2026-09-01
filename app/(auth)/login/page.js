@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { PublicHeader } from '@/app/_components/ui';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,7 +22,9 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="max-w-sm mx-auto px-5 py-10">
+    <div>
+      <PublicHeader />
+      <main className="max-w-sm mx-auto px-5 py-10">
       <h1 className="text-xl font-bold mb-6">Connexion</h1>
       <form onSubmit={handleSubmit} className="space-y-3">
         <input required type="email" placeholder="E-mail" className="w-full px-3 py-2.5 rounded-xl border border-slate-200"
@@ -33,6 +36,7 @@ export default function LoginPage() {
           {loading ? '...' : 'Se connecter'}
         </button>
       </form>
-    </main>
+      </main>
+    </div>
   );
 }

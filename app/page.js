@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { PublicHeader } from '@/app/_components/ui';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +9,7 @@ export default async function HomePage() {
 
   return (
     <div>
+      <PublicHeader />
       <div className="relative bg-slate-950 text-white px-5 pt-14 pb-14 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #fff 0, #fff 1px, transparent 1px, transparent 34px)' }} />
         <div className="relative max-w-xl mx-auto text-center">

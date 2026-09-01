@@ -1,4 +1,6 @@
 'use client';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export const RES_STATUS = ['CONFIRMEE', 'EN_ATTENTE', 'ANNULEE', 'TERMINEE'];
 export const RES_STATUS_LABEL = { CONFIRMEE: 'Confirmée', EN_ATTENTE: 'En attente', ANNULEE: 'Annulée', TERMINEE: 'Terminée' };
@@ -89,5 +91,27 @@ export function DateStrip({ date, onChange, days = 14 }) {
         </button>
       ))}
     </div>
+  );
+}
+
+export function PublicHeader() {
+  const { data: session, status } = useSession();
+  return (
+    <header className="sticky top-0 z-30 bg-slate-950 text-white px-5 py-3 flex items-center justify-between">
+      <Link href="/" className="flex items-center gap-2">
+        <span className="w-7 h-7 rounded-lg bg-lime-400 flex items-center justify-center text-slate-950 font-black text-sm">P</span>
+        <span className="font-bold tracking-tight">Padel<span className="text-lime-400">Go</span></span>
+      </Link>
+      <div className="flex items-center gap-2">
+        {status === 'authenticated' ? (
+          <Link href={session.user.role === 'OWNER' ? '/owner' : '/client'} className="text-xs font-semibold bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20">Mon espace</Link>
+        ) : (
+          <>
+            <Link href="/login" className="text-xs font-semibold text-slate-300 hover:text-white px-2">Connexion</Link>
+            <Link href="/register" className="text-xs font-semibold bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20">Créer un compte</Link>
+          </>
+        )}
+      </div>
+    </header>
   );
 }

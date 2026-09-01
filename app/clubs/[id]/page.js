@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
-import { Card, Badge, COURT_STATUS_LABEL, badgeCls } from '@/app/_components/ui';
+import { Card, Badge, COURT_STATUS_LABEL, PublicHeader } from '@/app/_components/ui';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +13,9 @@ export default async function ClubDetailPage({ params }) {
   const availableCourts = club.courts.filter((c) => c.status === 'DISPONIBLE');
 
   return (
-    <div className="max-w-2xl mx-auto pb-10">
+    <div>
+      <PublicHeader />
+      <div className="max-w-2xl mx-auto pb-10">
       <div className="bg-slate-950 text-white px-5 pt-6 pb-8 sm:rounded-2xl sm:mt-5">
         <Link href="/clubs" className="text-slate-400 text-xs mb-4 inline-block">← Clubs</Link>
         <div className="flex items-center gap-3">
@@ -62,6 +64,7 @@ export default async function ClubDetailPage({ params }) {
           className={`block text-center py-2.5 rounded-xl font-semibold text-sm ${availableCourts.length ? 'bg-lime-400 text-slate-950' : 'bg-slate-100 text-slate-400 pointer-events-none'}`}>
           {availableCourts.length === 0 ? 'Aucun terrain disponible' : `Réserver — dès ${club.pricePerHour}€/h`}
         </Link>
+      </div>
       </div>
     </div>
   );

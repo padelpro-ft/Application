@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, MapPin, Clock } from 'lucide-react';
-import { Card, Empty, inputCls } from '@/app/_components/ui';
+import { Card, Empty, inputCls, PublicHeader } from '@/app/_components/ui';
 
 export default function ClubsPage() {
   const [query, setQuery] = useState('');
@@ -20,7 +20,9 @@ export default function ClubsPage() {
   }, [query]);
 
   return (
-    <div className="max-w-2xl mx-auto px-5 py-8">
+    <div>
+      <PublicHeader />
+      <div className="max-w-2xl mx-auto px-5 py-8">
       <h1 className="text-xl font-bold mb-4">Trouver un club</h1>
       <div className="relative mb-5">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -48,6 +50,7 @@ export default function ClubsPage() {
             </Card>
           </Link>
         ))}
+      </div>
       </div>
     </div>
   );
