@@ -2,13 +2,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { LayoutGrid, Calendar, ClipboardList, Home, Wallet, Settings, LogOut } from 'lucide-react';
+import { LayoutGrid, Calendar, ClipboardList, Home, Wallet, Settings, LogOut, Users } from 'lucide-react';
 
 const TABS = [
   { href: '/owner', label: 'Dashboard', icon: LayoutGrid },
   { href: '/owner/planning', label: 'Planning', icon: Calendar },
   { href: '/owner/reservations', label: 'Résa.', icon: ClipboardList },
   { href: '/owner/courts', label: 'Terrains', icon: Home },
+  { href: '/owner/clients', label: 'Clients', icon: Users },
   { href: '/owner/billing', label: 'Factu.', icon: Wallet },
   { href: '/owner/club', label: 'Club', icon: Settings },
 ];

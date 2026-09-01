@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { z } from 'zod';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+const reservationSchema = z.object({
+  clubId: z.string().min(1),
+  courtId: z.string().min(1),
+  date: z.string().regex(dateRegex, 'Date invalide.'),
+  startTime: z.string().regex(timeRegex, 'Heure invalide.'),
+  duration: z.coerce.number().refine((d) => [60, 90, 120].includes(d), 'Durée invalide.'),
+  clientName: z.string().trim().optional(),
+  clientPhone: z.string().trim().optional(),
+  clientEmail: z.string().trim().email('E-mail invalide.').optional().or(z.literal('')),
+});
 
 function addMinutes(hhmm, minutes) {
   const [h, m] = hhmm.split(':').map(Number);
@@ -43,10 +57,17 @@ export async function GET(req) {
 export async function POST(req) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
-  const { clubId, courtId, date, startTime, duration, clientName, clientPhone, clientEmail } = body;
+  const parsed = reservationSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.errors[0].message }, { status: 400 });
+  }
+  const { clubId, courtId, date, startTime, duration, clientName, clientPhone, clientEmail } = parsed.data;
 
-  if (!clubId || !courtId || !date || !startTime || !duration) {
-    return NextResponse.json({ error: 'Champs manquants.' }, { status: 400 });
+  if (session?.user?.role === 'OWNER' && !clientName) {
+    return NextResponse.json({ error: 'Le nom du client est requis.' }, { status: 400 });
+  }
+  if (!session) {
+    return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 });
   }
 
   const court = await prisma.court.findUnique({ where: { id: courtId } });
