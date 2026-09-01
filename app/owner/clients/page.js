@@ -1,7 +1,8 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { Card, Empty, fullDateLabel } from '@/app/_components/ui';
+import { Card, Empty } from '@/app/_components/ui';
+import { fullDateLabel } from '@/app/_lib/shared';
 import OwnerOnboardingForm from '../_components/OwnerOnboardingForm';
 
 export const dynamic = 'force-dynamic';

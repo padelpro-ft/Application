@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { Card, Badge, Empty, fullDateLabel, RES_STATUS_LABEL } from '@/app/_components/ui';
+import { Card, Badge, Empty } from '@/app/_components/ui';
+import { fullDateLabel, RES_STATUS_LABEL } from '@/app/_lib/shared';
 import { ArrowRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';

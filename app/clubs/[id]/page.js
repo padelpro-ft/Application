@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
-import { Card, Badge, COURT_STATUS_LABEL, PublicHeader } from '@/app/_components/ui';
+import { Card, Badge, PublicHeader } from '@/app/_components/ui';
+import { COURT_STATUS_LABEL } from '@/app/_lib/shared';
 
 export const dynamic = 'force-dynamic';
 
