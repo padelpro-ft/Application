@@ -1,10 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { PublicHeader } from '@/app/_components/ui';
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const token = useSearchParams().get('token');
   const [password, setPassword] = useState('');
@@ -59,5 +59,13 @@ export default function ResetPasswordPage() {
         <Link href="/login" className="block text-center text-xs text-slate-400 mt-4">← Retour à la connexion</Link>
       </main>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={null}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
