@@ -31,6 +31,8 @@ export async function PUT(req, { params }) {
       name: body.name, description: body.description, address: body.address, city: body.city,
       postalCode: body.postalCode, phone: body.phone, email: body.email, whatsapp: body.whatsapp,
       openHour: body.openHour, closeHour: body.closeHour, pricePerHour: Number(body.pricePerHour),
+      cancellationHours: body.cancellationHours !== undefined ? Number(body.cancellationHours) : undefined,
+      cancellationPolicy: body.cancellationPolicy || null,
     },
   });
 

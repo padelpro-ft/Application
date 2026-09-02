@@ -40,6 +40,13 @@ export default async function ClubDetailPage({ params }) {
       {club.description && <p className="px-5 mt-5 text-sm text-slate-600 leading-relaxed">{club.description}</p>}
 
       <div className="px-5 mt-5">
+        <div className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Politique d'annulation</div>
+        <p className="text-xs text-slate-500">
+          Annulation possible jusqu'à {club.cancellationHours}h avant le créneau.{club.cancellationPolicy ? ` ${club.cancellationPolicy}` : ''}
+        </p>
+      </div>
+
+      <div className="px-5 mt-5">
         <div className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Contacter le club</div>
         <div className="flex flex-wrap gap-2">
           {club.phone && <a href={`tel:${club.phone}`} className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 text-slate-700"><Phone size={13} />Appeler</a>}

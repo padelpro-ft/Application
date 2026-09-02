@@ -50,6 +50,7 @@ model User {
 
   club         Club?         @relation("ClubOwner")
   reservations Reservation[] @relation("ClientReservations")
+  passwordResetTokens PasswordResetToken[]
 }
 
 model Club {
@@ -68,6 +69,8 @@ model Club {
   openHour     String   @default("08:00")
   closeHour    String   @default("23:00")
   pricePerHour Int      @default(24)
+  cancellationHours  Int     @default(24)
+  cancellationPolicy String?
   createdAt    DateTime @default(now())
 
   courts       Court[]
@@ -129,4 +132,13 @@ model Payment {
   transactionId String?
   paidAt        DateTime?
   createdAt     DateTime      @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

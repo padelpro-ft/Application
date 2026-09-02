@@ -1,13 +1,18 @@
 'use client';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, Badge, Empty, fullDateLabel, RES_STATUS_LABEL, todayISO } from '@/app/_components/ui';
+import { Card, Badge, Empty, ErrorText, fullDateLabel, RES_STATUS_LABEL, todayISO } from '@/app/_components/ui';
 
 export default function MyReservationsList({ reservations }) {
   const router = useRouter();
+  const [errors, setErrors] = useState({});
   const sorted = [...reservations].sort((a, b) => (a.date.toISOString() + a.startTime).localeCompare(b.date.toISOString() + b.startTime));
 
   const cancel = async (id) => {
-    await fetch(`/api/reservations/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reservationStatus: 'ANNULEE' }) });
+    setErrors((e) => ({ ...e, [id]: '' }));
+    const res = await fetch(`/api/reservations/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reservationStatus: 'ANNULEE' }) });
+    const data = await res.json();
+    if (!res.ok) { setErrors((e) => ({ ...e, [id]: data.error })); return; }
     router.refresh();
   };
 
@@ -35,6 +40,7 @@ export default function MyReservationsList({ reservations }) {
                   <button onClick={() => cancel(r.id)} className="text-xs font-semibold text-rose-600">Annuler</button>
                 )}
               </div>
+              {errors[r.id] && <div className="mt-2"><ErrorText>{errors[r.id]}</ErrorText></div>}
             </Card>
           );
         })}

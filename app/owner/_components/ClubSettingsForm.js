@@ -36,6 +36,8 @@ export default function ClubSettingsForm({ club }) {
           <Field label="Fermeture"><input type="time" className={inputCls} value={f.closeHour} onChange={set('closeHour')} /></Field>
           <Field label="Prix / h (€)"><input type="number" className={inputCls} value={f.pricePerHour} onChange={set('pricePerHour')} /></Field>
         </div>
+        <Field label="Délai d'annulation (heures avant le créneau)"><input type="number" min="0" className={inputCls} value={f.cancellationHours} onChange={set('cancellationHours')} /></Field>
+        <Field label="Note sur la politique d'annulation (optionnel)"><input className={inputCls} value={f.cancellationPolicy || ''} onChange={set('cancellationPolicy')} /></Field>
         <Btn full className="!mt-4" onClick={submit}>{saved ? <CheckCircle2 size={16} /> : 'Enregistrer'}</Btn>
       </div>
     </div>

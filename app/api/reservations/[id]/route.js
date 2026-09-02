@@ -43,6 +43,17 @@ export async function PUT(req, { params }) {
     if (body.reservationStatus !== 'ANNULEE') {
       return NextResponse.json({ error: 'Non autorisé.' }, { status: 403 });
     }
+    const club = await prisma.club.findUnique({ where: { id: reservation.clubId } });
+    const startsAt = new Date(reservation.date);
+    const [h, m] = reservation.startTime.split(':').map(Number);
+    startsAt.setHours(h, m, 0, 0);
+    const hoursUntilStart = (startsAt.getTime() - Date.now()) / (1000 * 60 * 60);
+    if (hoursUntilStart < club.cancellationHours) {
+      const policyNote = club.cancellationPolicy ? ` (${club.cancellationPolicy})` : '';
+      return NextResponse.json({
+        error: `Annulation impossible : elle doit être faite au moins ${club.cancellationHours}h avant le début du créneau${policyNote}.`,
+      }, { status: 409 });
+    }
     data.reservationStatus = 'ANNULEE';
   } else {
     if (body.reservationStatus) data.reservationStatus = body.reservationStatus;

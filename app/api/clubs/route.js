@@ -17,6 +17,8 @@ const clubSchema = z.object({
   openHour: z.string().regex(timeRegex, "Heure d'ouverture invalide.").optional(),
   closeHour: z.string().regex(timeRegex, 'Heure de fermeture invalide.').optional(),
   pricePerHour: z.coerce.number().positive('Le prix doit être positif.').optional(),
+  cancellationHours: z.coerce.number().int().min(0, "Le délai d'annulation ne peut pas être négatif.").optional(),
+  cancellationPolicy: z.string().trim().optional().or(z.literal('')),
 });
 
 // GET /clubs — public listing, optionally filtered by city/name
@@ -68,6 +70,8 @@ export async function POST(req) {
       openHour: data.openHour || '08:00',
       closeHour: data.closeHour || '23:00',
       pricePerHour: data.pricePerHour || 24,
+      cancellationHours: data.cancellationHours ?? 24,
+      cancellationPolicy: data.cancellationPolicy || null,
     },
   });
 

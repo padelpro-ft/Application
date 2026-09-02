@@ -5,7 +5,7 @@ import { Btn, Field, ErrorText, inputCls } from '@/app/_components/ui';
 
 export default function OwnerOnboardingForm() {
   const router = useRouter();
-  const [f, setF] = useState({ name: '', description: '', address: '', city: '', postalCode: '', phone: '', email: '', whatsapp: '', openHour: '08:00', closeHour: '23:00', pricePerHour: 24 });
+  const [f, setF] = useState({ name: '', description: '', address: '', city: '', postalCode: '', phone: '', email: '', whatsapp: '', openHour: '08:00', closeHour: '23:00', pricePerHour: 24, cancellationHours: 24, cancellationPolicy: '' });
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -46,6 +46,8 @@ export default function OwnerOnboardingForm() {
           <Field label="Fermeture"><input type="time" className={inputCls} value={f.closeHour} onChange={set('closeHour')} /></Field>
           <Field label="Prix / h (€)"><input type="number" min="1" className={inputCls} value={f.pricePerHour} onChange={set('pricePerHour')} /></Field>
         </div>
+        <Field label="Délai d'annulation (heures avant le créneau)"><input type="number" min="0" className={inputCls} value={f.cancellationHours} onChange={set('cancellationHours')} /></Field>
+        <Field label="Note sur la politique d'annulation (optionnel)"><input className={inputCls} placeholder="Ex : remboursement non garanti passé ce délai" value={f.cancellationPolicy} onChange={set('cancellationPolicy')} /></Field>
         <ErrorText>{error}</ErrorText>
         <Btn full disabled={saving} onClick={submit} className="!mt-4">{saving ? '...' : 'Créer mon club'}</Btn>
       </div>

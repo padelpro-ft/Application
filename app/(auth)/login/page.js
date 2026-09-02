@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { PublicHeader } from '@/app/_components/ui';
 
 export default function LoginPage() {
@@ -31,6 +32,9 @@ export default function LoginPage() {
           value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         <input required type="password" placeholder="Mot de passe" className="w-full px-3 py-2.5 rounded-xl border border-slate-200"
           value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+        <div className="text-right">
+          <Link href="/forgot-password" className="text-xs text-slate-400 hover:text-slate-600">Mot de passe oublié ?</Link>
+        </div>
         {error && <p className="text-sm text-rose-600">{error}</p>}
         <button disabled={loading} className="w-full py-2.5 rounded-xl bg-lime-400 font-semibold">
           {loading ? '...' : 'Se connecter'}
